@@ -1,9 +1,10 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import pluginVue from 'eslint-plugin-vue'
-import pluginQuasar from '@quasar/app-vite/eslint'
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import prettierSkipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import js from "@eslint/js";
+import globals from "globals";
+import pluginVue from "eslint-plugin-vue";
+import pluginQuasar from "@quasar/app-vite/eslint";
+import { defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript";
+import prettierSkipFormatting from "@vue/eslint-config-prettier/skip-formatting";
+import eslintPluginImport from "eslint-plugin-import";
 
 export default defineConfigWithVueTs(
   {
@@ -33,54 +34,89 @@ export default defineConfigWithVueTs(
    * pluginVue.configs["flat/recommended"]
    *   -> Above, plus rules to enforce subjective community defaults to ensure consistency.
    */
-  pluginVue.configs[ 'flat/essential' ],
+  pluginVue.configs["flat/essential"],
 
   {
-    files: ['**/*.ts', '**/*.vue'],
+    plugins: {
+      eslintPluginImport,
+    },
+  },
+
+  {
+    files: ["**/*.ts", "**/*.vue"],
     rules: {
-      '@typescript-eslint/consistent-type-imports': [
-        'error',
-        { prefer: 'type-imports' }
-      ],
-    }
+      "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
+    },
   },
   // https://github.com/vuejs/eslint-config-typescript
   vueTsConfigs.recommendedTypeChecked,
 
   {
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
+      ecmaVersion: "latest",
+      sourceType: "module",
 
       globals: {
         ...globals.browser,
         ...globals.node, // SSR, Electron, config files
-        process: 'readonly', // process.env.*
-        ga: 'readonly', // Google Analytics
-        cordova: 'readonly',
-        Capacitor: 'readonly',
-        chrome: 'readonly', // BEX related
-        browser: 'readonly' // BEX related
-      }
+        process: "readonly", // process.env.*
+        ga: "readonly", // Google Analytics
+        cordova: "readonly",
+        Capacitor: "readonly",
+        chrome: "readonly", // BEX related
+        browser: "readonly", // BEX related
+      },
     },
 
     // add your custom rules here
     rules: {
-      'prefer-promise-reject-errors': 'off',
+      "prefer-promise-reject-errors": "off",
 
       // allow debugger during development only
-      'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
-    }
+      "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+
+      "vue/block-order": [
+        "error",
+        {
+          order: ["template", "script", "script[setup]", ["style[scoped]", "style"]],
+        },
+      ],
+      "vue/component-definition-name-casing": ["error", "kebab-case"],
+      "vue/attributes-order": [
+        "error",
+        {
+          order: [
+            "DEFINITION",
+            "LIST_RENDERING",
+            "CONDITIONALS",
+            "RENDER_MODIFIERS",
+            "GLOBAL",
+            "UNIQUE",
+            "SLOT",
+            "TWO_WAY_BINDING",
+            "OTHER_DIRECTIVES",
+            ["ATTR_DYNAMIC", "ATTR_STATIC", "ATTR_SHORTHAND_BOOL"],
+            "EVENTS",
+            "CONTENT",
+          ],
+        },
+      ],
+      "vue/multi-word-component-names": "error",
+      "vue/no-v-html": "warn",
+      "vue/v-slot-style": ["error", "shorthand"],
+      "vue/component-name-in-template-casing": ["error", "kebab-case"],
+      "vue/custom-event-name-casing": ["error", "kebab-case"],
+    },
   },
 
   {
-    files: [ 'src-pwa/custom-service-worker.ts' ],
+    files: ["src-pwa/custom-service-worker.ts"],
     languageOptions: {
       globals: {
-        ...globals.serviceworker
-      }
-    }
+        ...globals.serviceworker,
+      },
+    },
   },
 
-  prettierSkipFormatting
-)
+  prettierSkipFormatting,
+);
