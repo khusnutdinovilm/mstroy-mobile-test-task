@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
+    "ag-grid-enterprise": "^34.0.1",
     "ag-grid-vue3": "^34.0.1",
     "pinia": "^3.0.1",
     "quasar": "^2.16.0",
@@ -31,6 +32,7 @@
     "@types/node": "^20.5.9",
     "@vue/eslint-config-prettier": "^10.1.0",
     "@vue/eslint-config-typescript": "^14.4.0",
+    "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.2",
     "eslint": "^9.14.0",
     "eslint-plugin-import": "^2.32.0",
@@ -39,9 +41,8 @@
     "prettier": "^3.3.3",
     "typescript": "~5.5.3",
     "vite-plugin-checker": "^0.9.0",
-    "vue-tsc": "^2.0.29",
-    "@vue/test-utils": "^2.4.6",
-    "vitest": "^3.1.2"
+    "vitest": "^3.1.2",
+    "vue-tsc": "^2.0.29"
   },
   "engines": {
     "node": "^28 || ^26 || ^24 || ^22 || ^20 || ^18",
