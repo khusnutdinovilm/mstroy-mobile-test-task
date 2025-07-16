@@ -1,4 +1,4 @@
-import type { INode } from "src/utils/tree-store/types";
+import type { INode } from "src/modules/tree-store/types/tree-store";
 
 export const isNode = (value: unknown): value is INode =>
   typeof value === "object" &&

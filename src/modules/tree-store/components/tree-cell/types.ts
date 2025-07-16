@@ -1,5 +1,6 @@
 import { type ICellRendererParams } from "ag-grid-enterprise";
-import type { INode, NodeIdType } from "src/utils/tree-store/types";
+
+import type { INode, NodeIdType } from "src/modules/tree-store/types/tree-store";
 
 export interface ITreeCellParams extends ICellRendererParams {
   isEditMode: () => boolean;

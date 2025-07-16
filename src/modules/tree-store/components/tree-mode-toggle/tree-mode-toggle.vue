@@ -19,13 +19,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import useTreeModeStore from "../../store/tree-mode-store";
+import useTreeMode from "src/modules/tree-store/store/use-tree-mode";
 
 defineOptions({
   name: "tree-mode-toggle",
 });
 
-const treeModeStore = useTreeModeStore();
+const treeModeStore = useTreeMode();
 
 const isEdit = computed(() => treeModeStore.isEditMode);
 

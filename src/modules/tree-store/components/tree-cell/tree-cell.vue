@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from "vue";
 
-import type { INode } from "src/utils/tree-store/types";
+import type { INode } from "src/modules/tree-store/types/tree-store";
 
 import type { ITreeCellProps } from "./types";
 

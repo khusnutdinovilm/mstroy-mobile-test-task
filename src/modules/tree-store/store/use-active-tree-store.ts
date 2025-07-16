@@ -2,8 +2,8 @@ import { defineStore } from "pinia";
 
 import { computed, ref } from "vue";
 
-import TreeStore from "src/utils/tree-store/tree-store";
-import type { INode, NodeIdType } from "src/utils/tree-store/types";
+import TreeStore from "src/modules/tree-store/utils/tree-store/tree-store";
+import type { INode, NodeIdType } from "src/modules/tree-store/types/tree-store";
 
 const useActiveTreeStore = defineStore("active-tree-store", () => {
   const treeStore = ref<TreeStore | null>(null);
