@@ -6,7 +6,6 @@
     dense
     label="Выберите файл"
     outlined
-    class="datase-selector"
   >
     <template #option="{ itemProps, opt }">
       <q-item v-bind="itemProps">
@@ -73,13 +72,3 @@ const options = computed(() => {
   }));
 });
 </script>
-
-<style lang="scss">
-.datase-selector {
-  min-width: 150px;
-
-  @media screen and (min-width: 768px) {
-    min-width: 200px;
-  }
-}
-</style>
