@@ -1,10 +1,7 @@
 import { Notify } from "quasar";
 
-interface INotifyPayload {
-  message: string;
-  timeout?: number;
-  html?: boolean;
-}
+import type { INotifyPayload } from "./types";
+
 export default function useNotify() {
   const position = "bottom-right";
 
