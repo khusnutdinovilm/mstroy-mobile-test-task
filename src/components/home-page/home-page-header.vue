@@ -1,6 +1,6 @@
 <template>
   <div class="home-page-header">
-    <tree-mode-toggle :disabled="isEmpty" />
+    <mode-switcher :disabled="isEmpty" />
 
     <div class="home-page-header__controls">
       <dataset-uploader v-if="isEditMode" class="home-page-header__uploader" />
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import TreeModeToggle from "src/modules/tree-store/components/tree-mode-toggle";
+import ModeSwitcher from "src/modules/mode-switcher/components/mode-switcher";
 import DatasetUploader from "src/modules/dataset/components/dataset-uploader";
 import DatasetSelector from "src/modules/dataset/components/dataset-selector";
 

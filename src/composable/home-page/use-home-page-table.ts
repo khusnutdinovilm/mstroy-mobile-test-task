@@ -5,19 +5,20 @@ import type { ColDef } from "ag-grid-enterprise";
 import TreeCell from "src/modules/tree-store/components/tree-cell";
 
 import useActiveTreeStore from "src/modules/tree-store/store/use-active-tree-store";
-import useTreeMode from "src/modules/tree-store/store/use-tree-mode";
 
 import type { INode } from "src/modules/tree-store/types/tree-store";
+import useModeSwitcher from "src/modules/mode-switcher/composable/use-mode-switcher";
 
 export default function () {
-  const treeModeStore = useTreeMode();
+  const { isEdit } = useModeSwitcher();
+
   const treeTableStore = useActiveTreeStore();
 
   const tableColumns = ref<ColDef[]>([
     {
       field: "label",
       headerName: "Наименование",
-      editable: () => treeModeStore.isEditMode,
+      editable: () => isEdit.value,
       resizable: false,
     },
   ]);
@@ -44,7 +45,7 @@ export default function () {
     cellRenderer: TreeCell,
     cellRendererParams: {
       suppressCount: true,
-      isEditMode: () => treeModeStore.isEditMode,
+      isEditMode: () => isEdit.value,
       createNewNode: treeTableStore.addNewNode,
       deleteNode: treeTableStore.removeNode,
     },

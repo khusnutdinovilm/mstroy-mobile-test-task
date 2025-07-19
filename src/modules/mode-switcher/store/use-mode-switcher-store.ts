@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
+
 import { ref } from "vue";
 
-const useTreeMode = defineStore("tree-mode", () => {
+const useModeSwitcherStore = defineStore("mode-switcher-store", () => {
   const isEditMode = ref(false);
 
   const toggleMode = () => {
@@ -14,4 +15,4 @@ const useTreeMode = defineStore("tree-mode", () => {
   };
 });
 
-export default useTreeMode;
+export default useModeSwitcherStore;
