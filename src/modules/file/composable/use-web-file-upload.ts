@@ -38,7 +38,7 @@ export default function useWebFileUpload<T>(payload: IUseWebFileUploadPayload<T>
         errorMessage: "Некорректная структура узлов дерева",
       });
 
-      onSuccess(file.name, validatedData);
+      await onSuccess(file.name, validatedData);
     } catch (error) {
       console.error(error);
       throw error;
