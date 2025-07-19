@@ -3,40 +3,71 @@
     <home-page-header :is-empty="isDatasetsEmpty" :is-edit-mode="isEditMode" />
 
     <div class="home-page__content" :class="homepageContentClasses">
-      <home-page-empty-state v-if="isDatasetsEmpty" />
-      <div v-else class="home-page__table-container">
-        <tree-table
-          :row-data="tableRows"
-          :column-defs="tableColumns"
-          :auto-group-col-def="autoGroupColumnDef"
-          @on-cell-edit-stop="editNode"
-        />
-      </div>
+      <div v-if="isDataLoading"></div>
+      <home-page-empty-state v-else-if="isDatasetsEmpty" />
+      <tree-data-table v-else class="home-page__table" />
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 import { HomePageHeader, HomePageEmptyState } from "src/components/home-page";
 
-import TreeTable from "src/modules/tree-store/components/tree-table";
+import TreeDataTable from "src/modules/tree-store/components/tree-data-table";
 
-import useHomePageTable from "src/composable/home-page/use-home-page-table";
-import useHomePageState from "src/composable/home-page/use-home-page-state";
+import useNotify from "src/utils/use-notify";
+
+import useDatasetMetaStore from "src/modules/dataset/store/use-dataset-meta-store";
+import useDatasetTreeStore from "src/modules/tree-store/store/use-dataset-tree-store";
+import useModeSwitcher from "src/modules/mode-switcher/composable/use-mode-switcher";
 
 defineOptions({
   name: "home-page",
 });
 
-const { isDatasetsEmpty, isEditMode } = useHomePageState();
+const notify = useNotify();
+const { isEdit: isEditMode } = useModeSwitcher();
+const datasetMetaStore = useDatasetMetaStore();
+const datasetTreeStore = useDatasetTreeStore();
 
-const { tableColumns, tableRows, autoGroupColumnDef, editNode } = useHomePageTable();
-
+const isDatasetsEmpty = computed(() => !datasetMetaStore.datasetsMetaMap.size);
+const isDataLoading = ref(true);
 const homepageContentClasses = computed(() => ({
   "home-page__content--empty": isDatasetsEmpty.value,
 }));
+
+const loadInitialData = async () => {
+  isDataLoading.value = true;
+
+  try {
+    await datasetMetaStore.loadAll();
+    await datasetTreeStore.loadAll();
+
+    selectFirstDatasetIfExists();
+  } catch (error) {
+    notify.negative({
+      message: "Произошла ошибка при загрузке данных",
+    });
+    throw error;
+  } finally {
+    isDataLoading.value = false;
+  }
+};
+
+const selectFirstDatasetIfExists = () => {
+  const firstDataset = datasetMetaStore.sortedDatasets[0];
+
+  if (firstDataset) {
+    datasetMetaStore.setSelectedDatasetMeta(firstDataset.name);
+    datasetTreeStore.setSelectedTreeStore(firstDataset.name);
+  }
+};
+
+onMounted(async () => {
+  await loadInitialData();
+});
 </script>
 
 <style lang="scss">
@@ -49,19 +80,18 @@ const homepageContentClasses = computed(() => ({
   height: 100%;
 
   &__content {
-    flex: 1;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
 
     &--empty {
-      display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
   }
 
-  &__table-container {
-    height: 100%;
+  &__content,
+  &__table {
+    flex: 1;
   }
 }
 </style>
