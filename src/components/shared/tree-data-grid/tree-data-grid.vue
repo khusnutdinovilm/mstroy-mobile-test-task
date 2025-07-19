@@ -38,7 +38,7 @@ defineOptions({
 
 const {
   defaultColDef = { flex: 1 },
-  groupDefaultExpanded = 10,
+  groupDefaultExpanded = 0,
   minTableWidth = "600px",
 } = defineProps<ITreeTableProps<T>>();
 
