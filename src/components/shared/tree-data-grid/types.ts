@@ -14,6 +14,7 @@ export interface ITreeTableProps<T> {
   autoGroupColDef: ColDef;
   defaultColDef?: ColDef;
   groupDefaultExpanded?: number;
+  minTableWidth?: string;
 }
 
 export interface ITreeTableEmits<T> {

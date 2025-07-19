@@ -1,10 +1,4 @@
-import type {
-  INode,
-  ITreeStore,
-  MapChildeNodesType,
-  MapNodeType,
-  NodeIdType,
-} from "src/modules/tree-store/types/tree-store";
+import type { INode, ITreeStore, MapChildeNodesType, MapNodeType, NodeIdType } from "./types";
 
 export default class TreeStore implements ITreeStore {
   private mapNodes: MapNodeType = new Map();

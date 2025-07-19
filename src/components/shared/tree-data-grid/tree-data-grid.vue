@@ -1,6 +1,6 @@
 <template>
   <ag-grid-vue
-    style="width: 100%; height: 100%"
+    :style="treeDataGridStyles"
     :row-data="rowData"
     :default-col-def="defaultColDef"
     :column-defs="columnDefs"
@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import { shallowRef } from "vue";
+import { computed, shallowRef } from "vue";
 
 import { AgGridVue } from "ag-grid-vue3";
 
@@ -33,13 +33,22 @@ import type {
 } from "./types";
 
 defineOptions({
-  name: "tree-table",
+  name: "tree-data-grid",
 });
 
-const { defaultColDef = { flex: 1 }, groupDefaultExpanded = 10 } =
-  defineProps<ITreeTableProps<T>>();
+const {
+  defaultColDef = { flex: 1 },
+  groupDefaultExpanded = 10,
+  minTableWidth = "600px",
+} = defineProps<ITreeTableProps<T>>();
 
 const emit = defineEmits<ITreeTableEmits<T>>();
+
+const treeDataGridStyles = computed(() => ({
+  width: "100%",
+  height: "100%",
+  minWidth: `${minTableWidth}`,
+}));
 
 const gridApi = shallowRef<GridApi | null>(null);
 
