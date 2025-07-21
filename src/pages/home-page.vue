@@ -11,62 +11,32 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted } from "vue";
 
 import { HomePageHeader, HomePageEmptyState } from "src/components/home-page";
 
 import TreeDataTable from "src/modules/tree-store/components/tree-data-table";
 
-import useNotify from "src/utils/use-notify";
-
-import useDatasetMetaStore from "src/modules/dataset/store/use-dataset-meta-store";
-import useDatasetTreeStore from "src/modules/tree-store/store/use-dataset-tree-store";
 import useModeSwitcher from "src/modules/mode-switcher/composable/use-mode-switcher";
+import useHomePageData from "src/composable/use-home-page-data";
+import useAppEnvironment from "src/composable/use-app-environment";
 
 defineOptions({
   name: "home-page",
 });
 
-const notify = useNotify();
 const { isEdit: isEditMode } = useModeSwitcher();
-const datasetMetaStore = useDatasetMetaStore();
-const datasetTreeStore = useDatasetTreeStore();
+const { isDataLoading, isDatasetsEmpty, loadInitialData } = useHomePageData();
+const { isMobile, isOnline } = useAppEnvironment();
 
-const isDatasetsEmpty = computed(() => !datasetMetaStore.datasetsMetaMap.size);
-const isDataLoading = ref(true);
 const homepageContentClasses = computed(() => ({
   "home-page__content--empty": isDatasetsEmpty.value,
 }));
 
-const loadInitialData = async () => {
-  isDataLoading.value = true;
-
-  try {
-    await datasetMetaStore.loadAll();
-    await datasetTreeStore.loadAll();
-
-    selectFirstDatasetIfExists();
-  } catch (error) {
-    notify.negative({
-      message: "Произошла ошибка при загрузке данных",
-    });
-    throw error;
-  } finally {
-    isDataLoading.value = false;
-  }
-};
-
-const selectFirstDatasetIfExists = () => {
-  const firstDataset = datasetMetaStore.sortedDatasets[0];
-
-  if (firstDataset) {
-    datasetMetaStore.setSelectedDatasetMeta(firstDataset.name);
-    datasetTreeStore.setSelectedTreeStore(firstDataset.name);
-  }
-};
-
 onMounted(async () => {
-  await loadInitialData();
+  if (isMobile.value && isOnline.value) {
+    await loadInitialData();
+  }
 });
 </script>
 
