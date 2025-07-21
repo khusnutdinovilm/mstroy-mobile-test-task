@@ -4,8 +4,11 @@ import { defineStore } from "pinia";
 
 import datasetMetaStorage from "src/modules/dataset/storage/dataset-meta-storage";
 import type { IDatasetMeta } from "src/modules/dataset/types/dataset";
+import useAppEnvironment from "src/composable/use-app-environment";
 
 const useDatasetMetaStore = defineStore("dataset-meta-store", () => {
+  const { canSaveData } = useAppEnvironment();
+
   const datasetsMetaMap = reactive<Map<string, IDatasetMeta>>(new Map());
 
   const sortedDatasets = computed<IDatasetMeta[]>(() =>
@@ -23,11 +26,13 @@ const useDatasetMetaStore = defineStore("dataset-meta-store", () => {
   const saveDatasetMeta = async (name: string): Promise<void> => {
     const entry: IDatasetMeta = {
       name,
-      saved: false,
+      saved: canSaveData.value,
       timestamp: Date.now(),
     };
 
-    await datasetMetaStorage.save(entry);
+    if (canSaveData.value) {
+      await datasetMetaStorage.save(entry);
+    }
 
     datasetsMetaMap.set(name, entry);
   };
@@ -40,7 +45,9 @@ const useDatasetMetaStore = defineStore("dataset-meta-store", () => {
   };
 
   const deleteDatasetMeta = async (name: string): Promise<void> => {
-    await datasetMetaStorage.delete(name);
+    if (canSaveData.value) {
+      await datasetMetaStorage.delete(name);
+    }
 
     datasetsMetaMap.delete(name);
 
